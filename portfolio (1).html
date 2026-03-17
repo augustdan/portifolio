@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Daniel Mulero</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0a;
+  --black2: #111111;
+  --black3: #1a1a1a;
+  --border: #222222;
+  --border2: #2e2e2e;
+  --orange: #ff6a00;
+  --orange2: #ff8c38;
+  --white: #f0f0f0;
+  --gray: #888888;
+  --gray2: #555555;
+  --font: 'JetBrains Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 400;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* scrollbar */
+::-webkit-scrollbar { width: 2px; }
+::-webkit-scrollbar-track { background: var(--black); }
+::-webkit-scrollbar-thumb { background: var(--orange); }
+
+/* cursor */
+#cur {
+  position: fixed; z-index: 9999;
+  width: 8px; height: 8px;
+  background: var(--orange); border-radius: 50%;
+  pointer-events: none; transform: translate(-50%,-50%);
+  transition: transform .1s, width .2s, height .2s;
+}
+#cur.big { width: 24px; height: 24px; background: transparent; border: 1px solid var(--orange); }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 60px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,.97);
+  backdrop-filter: blur(8px);
+}
+.nlogo {
+  font-size: 13px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--white); text-decoration: none;
+}
+.nlogo span { color: var(--orange); }
+.nlinks { display: flex; gap: 32px; list-style: none; }
+.nlinks a {
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gray); text-decoration: none; transition: color .2s;
+}
+.nlinks a:hover { color: var(--orange); }
+.nstatus {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 11px; letter-spacing: 2px; color: var(--gray);
+}
+.ndot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orange); animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,106,0,.4)} 50%{opacity:.6;box-shadow:0 0 0 4px rgba(255,106,0,0)} }
+
+main { position: relative; z-index: 2; }
+
+/* REVEAL */
+.rv { opacity: 0; transform: translateY(20px); transition: opacity .7s ease, transform .7s ease; }
+.rv.on { opacity: 1; transform: translateY(0); }
+
+/* SECTIONS */
+.sec { padding: 120px 60px; }
+.sec-line { border-top: 1px solid var(--border); }
+
+.sec-label {
+  font-size: 10px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 48px;
+  display: flex; align-items: center; gap: 16px;
+}
+.sec-label::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: var(--orange); }
+
+/* ═══ HERO ═══ */
+#hero {
+  min-height: 100vh; display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 120px 60px 80px;
+  position: relative; overflow: hidden;
+}
+
+.hero-bg-text {
+  position: absolute; top: 50%; left: -20px;
+  transform: translateY(-50%);
+  font-size: clamp(120px, 20vw, 280px); font-weight: 700;
+  color: transparent; -webkit-text-stroke: 1px var(--border2);
+  line-height: 1; pointer-events: none; user-select: none;
+  white-space: nowrap; z-index: 0;
+}
+
+.hero-content { position: relative; z-index: 1; max-width: 900px; }
+
+.hero-greeting {
+  font-size: 12px; letter-spacing: 4px; text-transform: uppercase;
+  color: var(--orange); margin-bottom: 24px;
+}
+
+.hero-name {
+  font-size: clamp(48px, 8vw, 100px); font-weight: 700;
+  line-height: .95; color: var(--white); margin-bottom: 28px;
+  letter-spacing: -2px;
+}
+.hero-name span { color: var(--orange); }
+
+.hero-role {
+  font-size: 14px; color: var(--gray); letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 40px;
+  display: flex; align-items: center; gap: 16px;
+}
+.hero-role::before { content: '—'; color: var(--orange); }
+
+.hero-desc {
+  font-size: 15px; line-height: 1.8; color: var(--gray);
+  max-width: 560px; margin-bottom: 52px; font-weight: 300;
+}
+
+.hero-ctas { display: flex; gap: 16px; align-items: center; }
+
+.btn-main {
+  font-family: var(--font); font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; padding: 16px 32px;
+  background: var(--orange); color: var(--black);
+  border: none; cursor: none; font-weight: 700;
+  text-decoration: none; transition: background .2s, transform .2s;
+  display: inline-block;
+}
+.btn-main:hover { background: var(--orange2); transform: translateY(-2px); }
+
+.btn-ghost {
+  font-family: var(--font); font-size: 11px; letter-spacing: 3px;
+  text-transform: uppercase; padding: 15px 32px;
+  background: transparent; color: var(--white);
+  border: 1px solid var(--border2); cursor: none;
+  text-decoration: none; transition: border-color .2s, color .2s;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--orange); color: var(--orange); }
+
+.hero-stats {
+  position: absolute; bottom: 80px; right: 60px;
+  display: flex; flex-direction: column; gap: 24px; z-index: 1;
+}
+.hstat { text-align: right; }
+.hstat-n { font-size: 32px; font-weight: 700; color: var(--white); line-height: 1; }
+.hstat-n span { color: var(--orange); }
+.hstat-l { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray2); margin-top: 3px; }
+
+.hero-line {
+  position: absolute; bottom: 0; left: 60px;
+  width: 1px; height: 80px; background: linear-gradient(transparent, var(--orange));
+}
+
+/* ═══ SOBRE ═══ */
+#sobre { background: var(--black2); }
+.sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.sobre-text p { font-size: 15px; line-height: 1.9; color: var(--gray); margin-bottom: 20px; font-weight: 300; }
+.sobre-text p strong { color: var(--white); font-weight: 500; }
+.sobre-quote {
+  margin-top: 32px; padding: 24px 28px;
+  border-left: 2px solid var(--orange);
+  background: var(--black3);
+}
+.sobre-quote p { font-size: 13px; line-height: 1.7; color: var(--gray); font-style: italic; margin: 0; }
+
+.sobre-info { display: flex; flex-direction: column; gap: 1px; }
+.info-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0; border-bottom: 1px solid var(--border);
+}
+.info-row:first-child { border-top: 1px solid var(--border); }
+.info-key { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray2); }
+.info-val { font-size: 12px; letter-spacing: 1px; color: var(--white); }
+.info-val.orange { color: var(--orange); }
+
+/* ═══ SKILLS ═══ */
+#skills { background: var(--black); }
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.sk {
+  background: var(--black); padding: 28px;
+  transition: background .2s;
+}
+.sk:hover { background: var(--black3); }
+.sk-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+.sk-name { font-size: 13px; font-weight: 700; color: var(--white); letter-spacing: 1px; }
+.sk-pct { font-size: 11px; color: var(--orange); font-weight: 700; }
+.sk-level { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray2); margin-bottom: 14px; }
+.sk-bar { height: 1px; background: var(--border2); }
+.sk-fill { height: 1px; background: var(--orange); width: 0; transition: width 1.4s cubic-bezier(.4,0,.2,1); }
+.sk-desc { font-size: 12px; color: var(--gray2); margin-top: 12px; line-height: 1.6; font-weight: 300; }
+
+/* ═══ PROJECTS ═══ */
+#projects { background: var(--black2); }
+.proj-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); }
+
+.pc {
+  border-bottom: 1px solid var(--border);
+  transition: background .25s;
+  position: relative;
+}
+.pc:last-child { border-bottom: none; }
+.pc:hover { background: var(--black3); }
+
+.pc-top {
+  padding: 32px 36px;
+  display: grid; grid-template-columns: auto 1fr auto;
+  gap: 32px; align-items: start; cursor: pointer;
+}
+.pc-num { font-size: 11px; letter-spacing: 2px; color: var(--gray2); padding-top: 4px; min-width: 28px; }
+.pc-info {}
+.pc-title-row { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; flex-wrap: wrap; }
+.pc-title { font-size: 18px; font-weight: 700; color: var(--white); letter-spacing: -0.5px; }
+.pc-title span { color: var(--orange); }
+.pc-status-badge {
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 10px; border: 1px solid;
+}
+.bs-live { color: var(--orange); border-color: rgba(255,106,0,.4); background: rgba(255,106,0,.07); }
+.bs-wip { color: var(--gray); border-color: var(--border2); }
+.bs-py { color: #60a5fa; border-color: rgba(96,165,250,.3); background: rgba(96,165,250,.06); }
+.pc-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray2); margin-bottom: 10px; }
+.pc-desc { font-size: 13px; color: var(--gray); line-height: 1.7; max-width: 600px; font-weight: 300; }
+.pc-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.pc-tag-list { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-top: 8px; }
+.ptag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 8px; border: 1px solid var(--border2); color: var(--gray2); }
+
+.btn-detail {
+  font-family: var(--font); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 10px 20px;
+  border: 1px solid var(--orange); color: var(--orange);
+  background: transparent; cursor: pointer; transition: all .2s;
+  white-space: nowrap;
+}
+.btn-detail:hover { background: var(--orange); color: var(--black); }
+.btn-live {
+  font-family: var(--font); font-size: 10px; letter-spacing: 2px;
+  text-transform: uppercase; padding: 10px 20px;
+  background: var(--orange); color: var(--black);
+  border: none; cursor: none; font-weight: 700; text-decoration: none;
+  transition: background .2s; white-space: nowrap; display: inline-block;
+}
+.btn-live:hover { background: var(--orange2); }
+
+/* project expand */
+.pc-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height .5s cubic-bezier(.4,0,.2,1), padding .3s;
+  border-top: 0px solid var(--border);
+}
+.pc-body.open {
+  max-height: 600px;
+  border-top: 1px solid var(--border);
+}
+.pc-body-inner { padding: 32px 36px 32px 96px; }
+.pc-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+.pb-section-title { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 16px; }
+.scope-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.scope-list li { font-size: 13px; color: var(--gray); line-height: 1.5; padding-left: 16px; position: relative; font-weight: 300; }
+.scope-list li::before { content: '_'; position: absolute; left: 0; color: var(--orange); }
+.dev-phases { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.dp { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid var(--border); }
+.dp-n { font-size: 10px; color: var(--orange); min-width: 20px; font-weight: 700; }
+.dp-name { font-size: 12px; color: var(--white); flex: 1; }
+.dp-time { font-size: 11px; color: var(--gray2); }
+.dp-st { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 2px 8px; border: 1px solid; }
+.st-ok { color: var(--orange); border-color: rgba(255,106,0,.35); }
+.st-act { color: #fbbf24; border-color: rgba(251,191,36,.35); }
+.st-nx { color: var(--gray2); border-color: var(--border2); }
+.prog-bar { height: 2px; background: var(--border2); margin-bottom: 6px; }
+.prog-fill { height: 2px; background: var(--orange); }
+.prog-label { font-size: 11px; color: var(--gray); display: flex; justify-content: space-between; }
+.next-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.next-list li { font-size: 12px; color: var(--gray2); padding-left: 14px; position: relative; font-weight: 300; }
+.next-list li::before { content: '→'; position: absolute; left: 0; color: var(--gray2); font-size: 11px; }
+.stack-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.spl { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--border2); color: var(--gray2); background: var(--black3); }
+
+/* ═══ QUOTE ═══ */
+#quote { background: var(--black); }
+.quote-top { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-bottom: 64px; }
+.quote-heading { font-size: clamp(28px, 4vw, 48px); font-weight: 700; color: var(--white); line-height: 1.1; letter-spacing: -1px; }
+.quote-heading span { color: var(--orange); }
+.quote-sub { font-size: 13px; color: var(--gray); line-height: 1.8; font-weight: 300; margin-top: 20px; }
+.qcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+.qc { background: var(--black); padding: 28px; transition: background .2s; }
+.qc:hover { background: var(--black3); }
+.qc-num { font-size: 10px; letter-spacing: 2px; color: var(--orange); margin-bottom: 16px; }
+.qc-title { font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 10px; }
+.qc-desc { font-size: 12px; color: var(--gray2); line-height: 1.6; font-weight: 300; }
+.quote-cta { display: flex; align-items: center; gap: 20px; padding-top: 48px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+.qcta-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gray2); }
+
+/* ═══ EXPERIENCE ═══ */
+#experience { background: var(--black2); }
+.exp-item { display: grid; grid-template-columns: 160px 1fr; gap: 40px; padding: 40px 0; border-bottom: 1px solid var(--border); }
+.exp-item:first-of-type { border-top: 1px solid var(--border); }
+.exp-date { font-size: 11px; letter-spacing: 2px; color: var(--gray2); text-transform: uppercase; padding-top: 4px; }
+.exp-company { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 5px; }
+.exp-role { font-size: 11px; letter-spacing: 2px; color: var(--orange); text-transform: uppercase; margin-bottom: 16px; }
+.exp-desc { font-size: 13px; color: var(--gray); line-height: 1.8; max-width: 560px; font-weight: 300; }
+.exp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+.etag { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 3px 9px; border: 1px solid var(--border2); color: var(--gray2); }
+
+/* ═══ EDUCATION ═══ */
+#education { background: var(--black); }
+.edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.edu-card { background: var(--black); padding: 36px; transition: background .2s; }
+.edu-card:hover { background: var(--black3); }
+.edu-period { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+.edu-inst { font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
+.edu-course { font-size: 12px; color: var(--gray); margin-bottom: 14px; line-height: 1.5; }
+.edu-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+
+/* ═══ CONTACT ═══ */
+#contact { background: var(--black2); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; }
+.contact-heading { font-size: clamp(32px, 5vw, 60px); font-weight: 700; color: var(--white); line-height: 1; letter-spacing: -2px; }
+.contact-heading span { color: var(--orange); }
+.contact-links { display: flex; flex-direction: column; gap: 1px; border: 1px solid var(--border); }
+.clnk {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+  text-decoration: none; color: var(--white); transition: background .2s, color .2s;
+}
+.clnk:last-child { border-bottom: none; }
+.clnk:hover { background: var(--black3); color: var(--orange); }
+.clnk-name { font-size: 13px; letter-spacing: 1px; }
+.clnk-arrow { font-size: 16px; color: var(--gray2); transition: color .2s, transform .2s; }
+.clnk:hover .clnk-arrow { color: var(--orange); transform: translateX(4px); }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 24px 60px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.flogo { font-size: 12px; font-weight: 700; letter-spacing: 3px; color: var(--white); }
+.flogo span { color: var(--orange); }
+.fcopy { font-size: 10px; letter-spacing: 2px; color: var(--gray2); }
+
+/* MODAL */
+.modal-ov {
+  display: none; position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.92); backdrop-filter: blur(8px);
+  overflow-y: auto; padding: 60px 20px;
+  align-items: flex-start; justify-content: center;
+}
+.modal-ov.open { display: flex; }
+.modal-box {
+  width: 100%; max-width: 820px;
+  background: var(--black2); border: 1px solid var(--border2);
+  position: relative;
+  animation: mopen .3s ease both;
+}
+@keyframes mopen { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:none} }
+.modal-close {
+  position: absolute; top: 20px; right: 20px;
+  width: 32px; height: 32px; background: var(--black3); border: 1px solid var(--border2);
+  color: var(--gray); font-size: 14px; cursor: pointer; transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { border-color: var(--orange); color: var(--orange); }
+.modal-hd { padding: 36px 36px 28px; border-bottom: 1px solid var(--border); }
+.modal-badge { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 12px; }
+.modal-title { font-size: 26px; font-weight: 700; color: var(--white); letter-spacing: -1px; margin-bottom: 6px; }
+.modal-title span { color: var(--orange); }
+.modal-sub { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray2); }
+.modal-body { padding: 32px 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+.ms-t { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+.st-bar2 { margin-bottom: 20px; }
+.st-track2 { height: 2px; background: var(--border2); margin-bottom: 6px; }
+.st-fill2 { height: 2px; background: var(--orange); }
+.st-row { display: flex; justify-content: space-between; }
+.st-pct2 { font-size: 11px; color: var(--orange); }
+.st-lbl2 { font-size: 11px; color: var(--gray2); }
+
+@media(max-width:768px){
+  nav{padding:18px 20px;}
+  .nlinks{display:none;}
+  .sec{padding:80px 20px;}
+  #hero{padding:100px 20px 60px;}
+  .hero-stats{display:none;}
+  .sobre-grid,.contact-grid,.quote-top,.edu-grid{grid-template-columns:1fr;}
+  .exp-item{grid-template-columns:1fr;}
+  .pc-top{grid-template-columns:1fr;gap:16px;}
+  .pc-body-inner{padding:24px 20px;}
+  .pc-body-grid{grid-template-columns:1fr;}
+  .modal-body{grid-template-columns:1fr;}
+  .modal-hd,.modal-body{padding:24px 20px;}
+  footer{padding:20px;flex-direction:column;gap:8px;}
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+
+<nav>
+  <a href="#hero" class="nlogo">DM<span>.</span></a>
+  <ul class="nlinks">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projetos</a></li>
+    <li><a href="#quote">Cotação</a></li>
+    <li><a href="#experience">Experiência</a></li>
+    <li><a href="#contact">Contato</a></li>
+  </ul>
+  <div class="nstatus"><div class="ndot"></div>Disponível</div>
+</nav>
+
+<main>
+
+<!-- HERO -->
+<section id="hero" class="sec">
+  <div class="hero-bg-text">NEXUS</div>
+  <div class="hero-content">
+    <div class="hero-greeting rv">// Analista de Processos &amp; Dados</div>
+    <h1 class="hero-name rv">Daniel<span>_</span><br>Mulero</h1>
+    <p class="hero-role rv">Power Platform · Python · IA</p>
+    <p class="hero-desc rv">Transformo dados em decisões e processos manuais em automações. Desenvolvimento de sistemas, dashboards estratégicos e soluções com Inteligência Artificial aplicada ao mundo real.</p>
+    <div class="hero-ctas rv">
+      <a href="#quote" class="btn-main">Solicitar projeto</a>
+      <a href="#projects" class="btn-ghost">Ver projetos</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hstat rv"><div class="hstat-n">500<span>+</span></div><div class="hstat-l">Conexões</div></div>
+    <div class="hstat rv"><div class="hstat-n">5</div><div class="hstat-l">Projetos</div></div>
+  </div>
+  <div class="hero-line"></div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre" class="sec sec-line">
+  <div class="sec-label rv">01 — Sobre</div>
+  <div class="sobre-grid">
+    <div class="sobre-text rv">
+      <p>Sou Daniel Mulero, profissional de dados e automação baseado em <strong>Santos, SP</strong>. Trabalho na <strong>CLI — Corredor Logístico e Infraestrutura S.A.</strong>, onde desenvolvo soluções com o ecossistema Microsoft Power Platform para a operação portuária.</p>
+      <p>Minha trajetória une <strong>logística operacional</strong> e <strong>tecnologia de dados</strong>: do técnico em Logística na ETEC até o desenvolvimento de dashboards, automações e sistemas que resolvem problemas reais do dia a dia corporativo.</p>
+      <p>Tenho interesse especial em <strong>Inteligência Artificial generativa</strong> aplicada a negócios — como ferramenta prática para eliminar retrabalho, acelerar decisões e criar produtos escaláveis.</p>
+      <div class="sobre-quote"><p>"Dados bem visualizados e processos bem automatizados são a diferença entre uma empresa que reage e uma que antecipa."</p></div>
+    </div>
+    <div class="sobre-info rv">
+      <div class="info-row"><span class="info-key">Localização</span><span class="info-val">Santos, SP — Brasil</span></div>
+      <div class="info-row"><span class="info-key">Empresa</span><span class="info-val orange">CLI S.A.</span></div>
+      <div class="info-row"><span class="info-key">Formação</span><span class="info-val">ADS · UNIMES</span></div>
+      <div class="info-row"><span class="info-key">Técnico</span><span class="info-val">Logística · ETEC</span></div>
+      <div class="info-row"><span class="info-key">Foco atual</span><span class="info-val orange">IA + Power Platform</span></div>
+      <div class="info-row"><span class="info-key">Status</span><span class="info-val orange">Disponível</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="sec sec-line">
+  <div class="sec-label rv">02 — Skills</div>
+  <div class="skills-grid">
+    <div class="sk rv"><div class="sk-top"><span class="sk-name">Power BI</span><span class="sk-pct">92%</span></div><div class="sk-level">Avançado</div><div class="sk-bar"><div class="sk-fill" data-w="92%"></div></div><div class="sk-desc">Dashboards interativos, DAX, modelagem e relatórios estratégicos.</div></div>
+    <div class="sk rv"><div class="sk-top"><span class="sk-name">Power Automate</span><span class="sk-pct">88%</span></div><div class="sk-level">Avançado</div><div class="sk-bar"><div class="sk-fill" data-w="88%"></div></div><div class="sk-desc">Automação de fluxos, integração de sistemas e processos repetitivos.</div></div>
+    <div class="sk rv"><div class="sk-top"><span class="sk-name">Power Apps</span><span class="sk-pct">82%</span></div><div class="sk-level">Avançado</div><div class="sk-bar"><div class="sk-fill" data-w="82%"></div></div><div class="sk-desc">Aplicações low-code com integração a dados corporativos.</div></div>
+    <div class="sk rv"><div class="sk-top"><span class="sk-name">Python</span><span class="sk-pct">75%</span></div><div class="sk-level">Intermediário</div><div class="sk-bar"><div class="sk-fill" data-w="75%"></div></div><div class="sk-desc">Análise de dados com pandas, automação de scripts e ETL.</div></div>
+    <div class="sk rv"><div class="sk-top"><span class="sk-name">Análise de Dados</span><span class="sk-pct">85%</span></div><div class="sk-level">Intermediário</div><div class="sk-bar"><div class="sk-fill" data-w="85%"></div></div><div class="sk-desc">Power Query, Excel avançado, tabelas dinâmicas e modelagem.</div></div>
+    <div class="sk rv"><div class="sk-top"><span class="sk-name">IA Generativa</span><span class="sk-pct">70%</span></div><div class="sk-level">Em evolução</div><div class="sk-bar"><div class="sk-fill" data-w="70%"></div></div><div class="sk-desc">Prompt engineering, agentes de IA e automação inteligente.</div></div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="sec sec-line">
+  <div class="sec-label rv">03 — Projetos</div>
+  <div class="proj-list rv">
+
+    <!-- NexusPlatform -->
+    <div class="pc">
+      <div class="pc-top" onclick="toggleProject(this)">
+        <div class="pc-num">01</div>
+        <div class="pc-info">
+          <div class="pc-title-row">
+            <div class="pc-title">NEXUS<span>Platform</span></div>
+            <span class="pc-status-badge bs-live">Concluído</span>
+          </div>
+          <div class="pc-sub">Plataforma SaaS · Industrial 4.0 · 3 Módulos</div>
+          <div class="pc-desc">Plataforma unificada de gestão industrial — produção, RH e IA em um só lugar. 40+ funcionalidades, 28+ APIs e 5 planos de acesso.</div>
+        </div>
+        <div class="pc-actions">
+          <a href="https://nexus-reborn-modules.lovable.app/" target="_blank" class="btn-live" onclick="event.stopPropagation()">Ver ao vivo ↗</a>
+          <button class="btn-detail" onclick="event.stopPropagation();openModal('nexusplatform')">Detalhes</button>
+          <div class="pc-tag-list"><span class="ptag">React</span><span class="ptag">TypeScript</span><span class="ptag">SaaS</span><span class="ptag">IA</span></div>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-body-inner">
+          <div class="pc-body-grid">
+            <div>
+              <div class="pb-section-title">Módulos</div>
+              <ul class="scope-list">
+                <li>NexusOp — Ordens de produção, QA e estoque</li>
+                <li>NexusRH — Folha, EPIs e processo seletivo</li>
+                <li>NexusIA — Agentes multicanal (WhatsApp, Telegram)</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pb-section-title">Stack</div>
+              <div class="stack-pills"><span class="spl">React</span><span class="spl">TypeScript</span><span class="spl">Lovable</span><span class="spl">REST API</span><span class="spl">Auth JWT</span><span class="spl">IA Generativa</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NexusCardápio -->
+    <div class="pc">
+      <div class="pc-top" onclick="toggleProject(this)">
+        <div class="pc-num">02</div>
+        <div class="pc-info">
+          <div class="pc-title-row">
+            <div class="pc-title">NEXUS<span>Cardápio</span></div>
+            <span class="pc-status-badge bs-py">Python</span>
+          </div>
+          <div class="pc-sub">Cardápio Digital · QR Code · Restaurante</div>
+          <div class="pc-desc">Sistema de cardápio digital por mesa via QR Code. Python puro, zero dependências. Painel admin ao vivo com chamadas de garçom em tempo real.</div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-detail" onclick="event.stopPropagation();openModal('nexuscardapio')">Detalhes</button>
+          <div class="pc-tag-list"><span class="ptag">Python</span><span class="ptag">REST API</span><span class="ptag">QR Code</span></div>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-body-inner">
+          <div class="pc-body-grid">
+            <div>
+              <div class="pb-section-title">Funcionalidades</div>
+              <ul class="scope-list">
+                <li>QR Code único por mesa com cardápio completo</li>
+                <li>4 categorias: Burgers, Acompanhamentos, Bebidas, Sobremesas</li>
+                <li>Chamada de garçom com painel admin ao vivo</li>
+                <li>Auto-refresh e página de QR Codes para impressão</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pb-section-title">Stack</div>
+              <div class="stack-pills"><span class="spl">Python 3</span><span class="spl">http.server</span><span class="spl">HTML5</span><span class="spl">CSS3</span><span class="spl">Vanilla JS</span><span class="spl">JSON API</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NexusG -->
+    <div class="pc">
+      <div class="pc-top" onclick="toggleProject(this)">
+        <div class="pc-num">03</div>
+        <div class="pc-info">
+          <div class="pc-title-row">
+            <div class="pc-title">NEXUS<span>G</span></div>
+            <span class="pc-status-badge bs-wip">Em desenvolvimento</span>
+          </div>
+          <div class="pc-sub">Gestão Financeira · Dashboard · SaaS</div>
+          <div class="pc-desc">Controle financeiro empresarial com fluxo de caixa em tempo real, categorização automática de lançamentos e relatórios exportáveis.</div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-detail" onclick="event.stopPropagation();openModal('nexusg')">Detalhes</button>
+          <div class="pc-tag-list"><span class="ptag">Python</span><span class="ptag">SQLite</span><span class="ptag">Chart.js</span></div>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-body-inner">
+          <div class="pc-body-grid">
+            <div>
+              <div class="pb-section-title">Funcionalidades</div>
+              <ul class="scope-list">
+                <li>Dashboard com KPIs: receita, despesa, saldo e margem</li>
+                <li>Gráfico de fluxo de caixa mensal interativo</li>
+                <li>Categorização automática de lançamentos</li>
+                <li>Relatórios exportáveis e comparativo mensal</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pb-section-title">Progresso</div>
+              <div class="prog-bar"><div class="prog-fill" style="width:28%"></div></div>
+              <div class="prog-label"><span>28% concluído</span><span>~12 dias restantes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NexusDesk -->
+    <div class="pc">
+      <div class="pc-top" onclick="toggleProject(this)">
+        <div class="pc-num">04</div>
+        <div class="pc-info">
+          <div class="pc-title-row">
+            <div class="pc-title">NEXUS<span>Desk</span></div>
+            <span class="pc-status-badge bs-wip">Em desenvolvimento</span>
+          </div>
+          <div class="pc-sub">Help Desk · Suporte · SLA · Ticket System</div>
+          <div class="pc-desc">Central de suporte com tickets, SLA e painel supervisor em tempo real. Atribuição automática por fila e base de conhecimento integrada.</div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-detail" onclick="event.stopPropagation();openModal('nexusdesk')">Detalhes</button>
+          <div class="pc-tag-list"><span class="ptag">Python</span><span class="ptag">SLA</span><span class="ptag">Real-time</span></div>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-body-inner">
+          <div class="pc-body-grid">
+            <div>
+              <div class="pb-section-title">Funcionalidades</div>
+              <ul class="scope-list">
+                <li>Abertura e triagem automática de tickets</li>
+                <li>Controle de SLA com alertas de vencimento</li>
+                <li>Dashboard supervisor com TMA e performance</li>
+                <li>Base de conhecimento com respostas rápidas</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pb-section-title">Progresso</div>
+              <div class="prog-bar"><div class="prog-fill" style="width:22%"></div></div>
+              <div class="prog-label"><span>22% concluído</span><span>~12 dias restantes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NexusFlow -->
+    <div class="pc">
+      <div class="pc-top" onclick="toggleProject(this)">
+        <div class="pc-num">05</div>
+        <div class="pc-info">
+          <div class="pc-title-row">
+            <div class="pc-title">NEXUS<span>Flow</span></div>
+            <span class="pc-status-badge bs-wip">Em desenvolvimento</span>
+          </div>
+          <div class="pc-sub">Gestão de Projetos · Kanban · Sprints</div>
+          <div class="pc-desc">Gestão de projetos com Kanban, sprints e burndown chart. Timeline visual, controle de tempo por tarefa e relatórios de produtividade.</div>
+        </div>
+        <div class="pc-actions">
+          <button class="btn-detail" onclick="event.stopPropagation();openModal('nexusflow')">Detalhes</button>
+          <div class="pc-tag-list"><span class="ptag">Python</span><span class="ptag">Kanban</span><span class="ptag">Chart.js</span></div>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-body-inner">
+          <div class="pc-body-grid">
+            <div>
+              <div class="pb-section-title">Funcionalidades</div>
+              <ul class="scope-list">
+                <li>Board Kanban drag-and-drop com colunas customizáveis</li>
+                <li>Planejamento de sprints e burndown chart</li>
+                <li>Timeline visual por projeto (Gantt simplificado)</li>
+                <li>Timer por tarefa e relatórios de produtividade</li>
+              </ul>
+            </div>
+            <div>
+              <div class="pb-section-title">Progresso</div>
+              <div class="prog-bar"><div class="prog-fill" style="width:30%"></div></div>
+              <div class="prog-label"><span>30% concluído</span><span>~13 dias restantes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section id="quote" class="sec sec-line">
+  <div class="sec-label rv">04 — Solicitar Projeto</div>
+  <div class="quote-top rv">
+    <div>
+      <div class="quote-heading">Tem uma<br>ideia?<br><span>Vamos construir.</span></div>
+      <p class="quote-sub">Desenvolvo soluções customizadas no ecossistema Nexus ou do zero. Módulo específico, automação com Power Platform ou sistema completo em Python.</p>
+    </div>
+    <div></div>
+  </div>
+  <div class="qcards rv">
+    <div class="qc"><div class="qc-num">01</div><div class="qc-title">Módulo Nexus</div><div class="qc-desc">Novo módulo integrado ao ecossistema Nexus, adaptado à sua operação e necessidades.</div></div>
+    <div class="qc"><div class="qc-num">02</div><div class="qc-title">Power Platform</div><div class="qc-desc">Fluxos Power Automate, dashboards Power BI e apps Power Apps para digitalizar processos.</div></div>
+    <div class="qc"><div class="qc-num">03</div><div class="qc-title">Sistema Python</div><div class="qc-desc">Aplicações web com backend Python, APIs REST e frontend moderno. Leve e sem dependências.</div></div>
+    <div class="qc"><div class="qc-num">04</div><div class="qc-title">Integração com IA</div><div class="qc-desc">Agentes de IA, automação inteligente e integração com LLMs em sistemas existentes ou novos.</div></div>
+  </div>
+  <div class="quote-cta rv">
+    <span class="qcta-label">Entre em contato →</span>
+    <a href="https://wa.me/5513999999999?text=Ol%C3%A1%20Daniel!%20Vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20uma%20cota%C3%A7%C3%A3o." target="_blank" class="btn-main">WhatsApp</a>
+    <a href="https://www.linkedin.com/in/daniel-mulero" target="_blank" class="btn-ghost">LinkedIn</a>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="sec sec-line">
+  <div class="sec-label rv">05 — Experiência</div>
+  <div class="exp-item rv">
+    <div class="exp-date">Atual</div>
+    <div>
+      <div class="exp-company">CLI — Corredor Logístico e Infraestrutura S.A.</div>
+      <div class="exp-role">Analista de Processos &amp; Dados · Power Platform Dev</div>
+      <div class="exp-desc">Desenvolvimento de soluções Power Platform para automação de processos operacionais e logísticos. Dashboards Power BI para KPIs estratégicos, fluxos com Power Automate e apps com Power Apps para suporte à operação portuária.</div>
+      <div class="exp-tags"><span class="etag">Power BI</span><span class="etag">Power Automate</span><span class="etag">Power Apps</span><span class="etag">Python</span><span class="etag">Logística</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education" class="sec sec-line">
+  <div class="sec-label rv">06 — Educação</div>
+  <div class="edu-grid rv">
+    <div class="edu-card">
+      <div class="edu-period">2026 — 2027 · Em andamento</div>
+      <div class="edu-inst">Universidade Metropolitana de Santos</div>
+      <div class="edu-course">Tecnólogo em Análise e Desenvolvimento de Sistemas · EAD</div>
+      <div class="edu-tags"><span class="etag">ADS</span><span class="etag">Python</span><span class="etag">Lógica</span></div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-period">2023 — 2024 · Concluído</div>
+      <div class="edu-inst">ETEC — Escola Técnica Estadual de SP</div>
+      <div class="edu-course">Técnico em Logística, Materiais e Supply Chain</div>
+      <div class="edu-tags"><span class="etag">Logística</span><span class="etag">Supply Chain</span><span class="etag">Portos</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="sec sec-line">
+  <div class="sec-label rv">07 — Contato</div>
+  <div class="contact-grid">
+    <div class="rv">
+      <div class="contact-heading">Vamos<br>trabalhar<br><span>juntos.</span></div>
+    </div>
+    <div class="contact-links rv">
+      <a href="https://www.linkedin.com/in/daniel-mulero" target="_blank" class="clnk"><span class="clnk-name">LinkedIn</span><span class="clnk-arrow">↗</span></a>
+      <a href="/cdn-cgi/l/email-protection#3c585d5255595012514950594e537c59515d5550125f5351" class="clnk"><span class="clnk-name">E-mail</span><span class="clnk-arrow">↗</span></a>
+      <a href="https://wa.me/5513999999999" target="_blank" class="clnk"><span class="clnk-name">WhatsApp</span><span class="clnk-arrow">↗</span></a>
+      <a href="https://github.com/daniel-mulero" target="_blank" class="clnk"><span class="clnk-name">GitHub</span><span class="clnk-arrow">↗</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="flogo">DM<span>.</span></div>
+  <div class="fcopy">2025 · Daniel Mulero · Santos, SP</div>
+</footer>
+
+<!-- MODALS -->
+<div class="modal-ov" id="modal-nexusplatform">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('nexusplatform')">✕</button>
+    <div class="modal-hd">
+      <div class="modal-badge">Concluído · Plataforma SaaS · Industrial 4.0</div>
+      <div class="modal-title">NEXUS<span>Platform</span></div>
+      <div class="modal-sub">Três módulos. Uma plataforma industrial completa.</div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="ms-t">Escopo</div>
+        <ul class="scope-list" style="margin-bottom:20px">
+          <li>NexusOp: pipeline de ordens, apontamento por operador e QA</li>
+          <li>NexusRH: folha INSS/IRRF/FGTS, EPIs e processo seletivo</li>
+          <li>NexusIA: agentes multicanal para WhatsApp e Telegram</li>
+          <li>Dashboard unificado com KPIs em tempo real</li>
+          <li>5 planos com controle de acesso por módulo</li>
+          <li>28+ endpoints REST documentados</li>
+        </ul>
+        <div class="ms-t">Stack</div>
+        <div class="stack-pills"><span class="spl">React</span><span class="spl">TypeScript</span><span class="spl">Lovable</span><span class="spl">REST API</span><span class="spl">Auth JWT</span><span class="spl">IA Generativa</span></div>
+      </div>
+      <div>
+        <div class="ms-t">Fases</div>
+        <div class="dev-phases">
+          <div class="dp"><div class="dp-n">01</div><div class="dp-name">Estrutura + Auth</div><div class="dp-time">2 sem.</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">02</div><div class="dp-name">NexusOp</div><div class="dp-time">4 sem.</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">03</div><div class="dp-name">NexusRH</div><div class="dp-time">4 sem.</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">04</div><div class="dp-name">NexusIA</div><div class="dp-time">3 sem.</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">05</div><div class="dp-name">Deploy + produção</div><div class="dp-time">2 sem.</div><span class="dp-st st-ok">Feito</span></div>
+        </div>
+        <div class="ms-t" style="margin-top:20px">Status</div>
+        <div class="st-bar2"><div class="st-track2"><div class="st-fill2" style="width:100%"></div></div><div class="st-row"><div class="st-pct2">100% concluído</div><div class="st-lbl2">Disponível ao vivo</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-nexuscardapio">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('nexuscardapio')">✕</button>
+    <div class="modal-hd">
+      <div class="modal-badge">Python · Cardápio Digital · QR Code</div>
+      <div class="modal-title">NEXUS<span>Cardápio</span></div>
+      <div class="modal-sub">Sistema completo de cardápio digital por mesa</div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="ms-t">Escopo</div>
+        <ul class="scope-list" style="margin-bottom:20px">
+          <li>QR Codes únicos por mesa via endpoint /qrcodes</li>
+          <li>4 categorias: Burgers, Acompanhamentos, Bebidas, Sobremesas</li>
+          <li>Chamada de garçom com motivo e observação</li>
+          <li>Painel admin /admin com chamadas em tempo real</li>
+          <li>Auto-refresh a cada 8s — zero dependências externas</li>
+        </ul>
+        <div class="ms-t">Stack</div>
+        <div class="stack-pills"><span class="spl">Python 3</span><span class="spl">http.server</span><span class="spl">HTML5</span><span class="spl">CSS3</span><span class="spl">Vanilla JS</span><span class="spl">JSON API</span></div>
+      </div>
+      <div>
+        <div class="ms-t">Fases</div>
+        <div class="dev-phases">
+          <div class="dp"><div class="dp-n">01</div><div class="dp-name">Servidor + rotas</div><div class="dp-time">1 dia</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">02</div><div class="dp-name">Cardápio + menu DB</div><div class="dp-time">2 dias</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">03</div><div class="dp-name">Chamadas + admin</div><div class="dp-time">1 dia</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">04</div><div class="dp-name">QR Codes + polish</div><div class="dp-time">1 dia</div><span class="dp-st st-ok">Feito</span></div>
+        </div>
+        <div class="ms-t" style="margin-top:20px">Status</div>
+        <div class="st-bar2"><div class="st-track2"><div class="st-fill2" style="width:85%"></div></div><div class="st-row"><div class="st-pct2">85% concluído</div><div class="st-lbl2">~5 dias de dev</div></div></div>
+        <ul class="next-list" style="margin-top:12px"><li>Persistência SQLite</li><li>Notificação sonora no painel</li><li>Integração com impressoras térmicas</li></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+      <div class="modal-title">NEXUS<span>Skins</span></div>
+      <div class="modal-sub">Marketplace de skins para Counter-Strike 2</div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="ms-t">Escopo</div>
+        <ul class="scope-list" style="margin-bottom:20px">
+          <li>Catálogo filtrável por raridade, arma e preço</li>
+          <li>Sistema de saldo e inventário pessoal</li>
+          <li>Compra e venda entre usuários com validação</li>
+          <li>Histórico de transações com filtros por data</li>
+          <li>Autenticação com sessão e perfil de usuário</li>
+        </ul>
+        <div class="ms-t">Stack</div>
+        <div class="stack-pills"><span class="spl">Python 3</span><span class="spl">http.server</span><span class="spl">HTML5</span><span class="spl">CSS3</span><span class="spl">Vanilla JS</span><span class="spl">Sessions</span></div>
+      </div>
+      <div>
+        <div class="ms-t">Fases</div>
+        <div class="dev-phases">
+          <div class="dp"><div class="dp-n">01</div><div class="dp-name">Catálogo base</div><div class="dp-time">2 dias</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">02</div><div class="dp-name">Usuários + saldo</div><div class="dp-time">2 dias</div><span class="dp-st st-act">Andamento</span></div>
+          <div class="dp"><div class="dp-n">03</div><div class="dp-name">Marketplace</div><div class="dp-time">3 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">04</div><div class="dp-name">UI polish</div><div class="dp-time">2 dias</div><span class="dp-st st-nx">Próximo</span></div>
+        </div>
+        <div class="ms-t" style="margin-top:20px">Status</div>
+        <div class="st-bar2"><div class="st-track2"><div class="st-fill2" style="width:35%"></div></div><div class="st-row"><div class="st-pct2">35%</div><div class="st-lbl2">~9 dias restantes</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-nexusg">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('nexusg')">✕</button>
+    <div class="modal-hd">
+      <div class="modal-badge">Em Desenvolvimento · Gestão Financeira</div>
+      <div class="modal-title">NEXUS<span>G</span></div>
+      <div class="modal-sub">Gestão financeira inteligente para empresas</div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="ms-t">Escopo</div>
+        <ul class="scope-list" style="margin-bottom:20px">
+          <li>Dashboard com receita, despesa, saldo e margem</li>
+          <li>Gráfico de fluxo de caixa mensal interativo</li>
+          <li>Categorização automática de lançamentos</li>
+          <li>Alertas de orçamento e metas mensais</li>
+          <li>Relatórios exportáveis em PDF/CSV</li>
+        </ul>
+        <div class="ms-t">Stack</div>
+        <div class="stack-pills"><span class="spl">Python 3</span><span class="spl">SQLite</span><span class="spl">REST API</span><span class="spl">Chart.js</span><span class="spl">HTML5</span><span class="spl">Vanilla JS</span></div>
+      </div>
+      <div>
+        <div class="ms-t">Fases</div>
+        <div class="dev-phases">
+          <div class="dp"><div class="dp-n">01</div><div class="dp-name">Modelagem + DB</div><div class="dp-time">2 dias</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">02</div><div class="dp-name">Dashboard + gráficos</div><div class="dp-time">3 dias</div><span class="dp-st st-act">Andamento</span></div>
+          <div class="dp"><div class="dp-n">03</div><div class="dp-name">Lançamentos</div><div class="dp-time">3 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">04</div><div class="dp-name">Relatórios</div><div class="dp-time">2 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">05</div><div class="dp-name">Alertas + metas</div><div class="dp-time">2 dias</div><span class="dp-st st-nx">Próximo</span></div>
+        </div>
+        <div class="ms-t" style="margin-top:20px">Status</div>
+        <div class="st-bar2"><div class="st-track2"><div class="st-fill2" style="width:28%"></div></div><div class="st-row"><div class="st-pct2">28%</div><div class="st-lbl2">~12 dias restantes</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-nexusdesk">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('nexusdesk')">✕</button>
+    <div class="modal-hd">
+      <div class="modal-badge">Em Desenvolvimento · Help Desk · SLA</div>
+      <div class="modal-title">NEXUS<span>Desk</span></div>
+      <div class="modal-sub">Central de suporte inteligente com SLA</div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="ms-t">Escopo</div>
+        <ul class="scope-list" style="margin-bottom:20px">
+          <li>Abertura e triagem automática de tickets</li>
+          <li>Painel de atendentes com fila por SLA e prioridade</li>
+          <li>Dashboard supervisor: TMA, volume, performance</li>
+          <li>Alertas de vencimento de SLA</li>
+          <li>Base de conhecimento com respostas rápidas</li>
+        </ul>
+        <div class="ms-t">Stack</div>
+        <div class="stack-pills"><span class="spl">Python 3</span><span class="spl">SQLite</span><span class="spl">SSE</span><span class="spl">REST API</span><span class="spl">HTML5</span><span class="spl">Vanilla JS</span></div>
+      </div>
+      <div>
+        <div class="ms-t">Fases</div>
+        <div class="dev-phases">
+          <div class="dp"><div class="dp-n">01</div><div class="dp-name">Modelo + rotas</div><div class="dp-time">2 dias</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">02</div><div class="dp-name">Portal do cliente</div><div class="dp-time">2 dias</div><span class="dp-st st-act">Andamento</span></div>
+          <div class="dp"><div class="dp-n">03</div><div class="dp-name">Painel + SLA</div><div class="dp-time">3 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">04</div><div class="dp-name">Dashboard sup.</div><div class="dp-time">3 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">05</div><div class="dp-name">Base conhecimento</div><div class="dp-time">2 dias</div><span class="dp-st st-nx">Próximo</span></div>
+        </div>
+        <div class="ms-t" style="margin-top:20px">Status</div>
+        <div class="st-bar2"><div class="st-track2"><div class="st-fill2" style="width:22%"></div></div><div class="st-row"><div class="st-pct2">22%</div><div class="st-lbl2">~12 dias restantes</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-ov" id="modal-nexusflow">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('nexusflow')">✕</button>
+    <div class="modal-hd">
+      <div class="modal-badge">Em Desenvolvimento · Kanban · Sprints</div>
+      <div class="modal-title">NEXUS<span>Flow</span></div>
+      <div class="modal-sub">Gestão de projetos com visão de fluxo completa</div>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="ms-t">Escopo</div>
+        <ul class="scope-list" style="margin-bottom:20px">
+          <li>Kanban drag-and-drop com colunas customizáveis</li>
+          <li>Sprints com backlog, velocity e burndown chart</li>
+          <li>Timeline visual por projeto (Gantt simplificado)</li>
+          <li>Timer por tarefa e relatórios de produtividade</li>
+          <li>Notificações por marco e vencimento</li>
+        </ul>
+        <div class="ms-t">Stack</div>
+        <div class="stack-pills"><span class="spl">Python 3</span><span class="spl">SQLite</span><span class="spl">Drag &amp; Drop</span><span class="spl">Chart.js</span><span class="spl">HTML5</span><span class="spl">Vanilla JS</span></div>
+      </div>
+      <div>
+        <div class="ms-t">Fases</div>
+        <div class="dev-phases">
+          <div class="dp"><div class="dp-n">01</div><div class="dp-name">CRUD de tarefas</div><div class="dp-time">2 dias</div><span class="dp-st st-ok">Feito</span></div>
+          <div class="dp"><div class="dp-n">02</div><div class="dp-name">Kanban + drag</div><div class="dp-time">3 dias</div><span class="dp-st st-act">Andamento</span></div>
+          <div class="dp"><div class="dp-n">03</div><div class="dp-name">Sprints + burndown</div><div class="dp-time">3 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">04</div><div class="dp-name">Timeline</div><div class="dp-time">3 dias</div><span class="dp-st st-nx">Próximo</span></div>
+          <div class="dp"><div class="dp-n">05</div><div class="dp-name">Relatórios + timer</div><div class="dp-time">2 dias</div><span class="dp-st st-nx">Próximo</span></div>
+        </div>
+        <div class="ms-t" style="margin-top:20px">Status</div>
+        <div class="st-bar2"><div class="st-track2"><div class="st-fill2" style="width:30%"></div></div><div class="st-row"><div class="st-pct2">30%</div><div class="st-lbl2">~13 dias restantes</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// cursor
+var cur=document.getElementById('cur'),mx=0,my=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+document.querySelectorAll('a,button,.pc-top').forEach(function(el){
+  el.addEventListener('mouseenter',function(){cur.classList.add('big');});
+  el.addEventListener('mouseleave',function(){cur.classList.remove('big');});
+});
+
+// reveal
+var io=new IntersectionObserver(function(entries){
+  entries.forEach(function(e,i){if(e.isIntersecting)setTimeout(function(){e.target.classList.add('on');},i*80);});
+},{threshold:0.08});
+document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+
+// skill bars
+var bo=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){if(e.isIntersecting){e.target.style.width=e.target.getAttribute('data-w');bo.unobserve(e.target);}});
+},{threshold:0.5});
+document.querySelectorAll('.sk-fill').forEach(function(b){bo.observe(b);});
+
+// project accordion
+function toggleProject(el){
+  var body=el.parentElement.querySelector('.pc-body');
+  var isOpen=body.classList.contains('open');
+  document.querySelectorAll('.pc-body.open').forEach(function(b){b.classList.remove('open');});
+  if(!isOpen) body.classList.add('open');
+}
+
+// modals
+function openModal(id){document.getElementById('modal-'+id).classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById('modal-'+id).classList.remove('open');document.body.style.overflow='';}
+document.querySelectorAll('.modal-ov').forEach(function(ov){
+  ov.addEventListener('click',function(e){if(e.target===ov){var id=ov.id.replace('modal-','');closeModal(id);}});
+});
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape') document.querySelectorAll('.modal-ov.open').forEach(function(m){closeModal(m.id.replace('modal-',''));});
+});
+</script>
+</body>
+</html>
